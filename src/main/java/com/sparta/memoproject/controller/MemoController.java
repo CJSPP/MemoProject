@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,9 +33,8 @@ public class MemoController {
 
     //선택한 게시글 조회
     @GetMapping("/api/memo/{id}")
-    public Long select_memo(@PathVariable Long id) {
-        memoRepository.findById(id);
-        return id;
+    public Optional<Memo> select_memo(@PathVariable Long id) {
+        return memoRepository.findById(id);
     }
 
     //선택한 게시글 수정
@@ -42,7 +42,7 @@ public class MemoController {
     public Long updatememo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
         Memo memo = new Memo();
         String password = requestDto.getPassword();
-        if (password == memo.getPassword()) {
+        if (password.equals(memo.getPassword())) {
             memoService.update(id, requestDto);
         } else {
             System.out.println("비밀번호가 틀렸습니다.");
@@ -54,7 +54,7 @@ public class MemoController {
     public Long deletememo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
         Memo memo = new Memo();
         String password = requestDto.getPassword();
-        if (password == memo.getPassword()) {
+        if (password.equals(memo.getPassword())) {
             memoRepository.deleteById(id);
         } else {
             System.out.println("비밀번호가 틀렸습니다.");
