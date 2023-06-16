@@ -40,8 +40,14 @@ public class MemoController {
     //선택한 게시글 수정
     @PutMapping("/api/selectmemo/{id}")
     public Long updatememo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
-        return memoService.update(id, requestDto);
-
+        Memo memo = new Memo();
+        String password = requestDto.getPassword();
+        if (password == memo.getPassword()) {
+            memoService.update(id, requestDto);
+        } else {
+            System.out.println("비밀번호가 틀렸습니다.");
+        }
+        return id;
     }
 
     @DeleteMapping("/api/selectmemo/{id}")
